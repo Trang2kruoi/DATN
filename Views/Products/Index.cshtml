@@ -1,0 +1,83 @@
+@model IEnumerable<DATN.Models.Product>
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    int? selectedCategory = ViewBag.SelectedCategory as int?;
+    var categories = ViewBag.Categories as List<DATN.Models.Category> ?? new List<DATN.Models.Category>();
+    var currentCategoryName = categories.FirstOrDefault(c => c.Id == selectedCategory)?.Name ?? "Tất cả sản phẩm";
+}
+
+<div class="breadcrumb-container">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/">Trang chủ</a></li>
+            @if (selectedCategory.HasValue && selectedCategory > 0)
+            {
+                <li><a href="/Products">Sản phẩm</a></li>
+                <li>@currentCategoryName</li>
+            }
+            else
+            {
+                <li>Sản phẩm</li>
+            }
+        </ul>
+    </div>
+</div>
+
+<div class="container margin-bottom-50">
+    <div class="catalog-layout">
+        <!-- Sidebar filters -->
+        <div class="catalog-sidebar">
+            <partial name="_Sidebar" />
+        </div>
+
+        <!-- Catalog main list -->
+        <div class="catalog-main">
+            <!-- Header bar: current selection & sorting -->
+            <div class="catalog-header-bar">
+                <div class="catalog-info">
+                    <h1 class="catalog-title">@currentCategoryName</h1>
+                    <span class="catalog-count">Tìm thấy <strong>@Model.Count()</strong> sản phẩm</span>
+                </div>
+                
+                <div class="catalog-sorting">
+                    <form id="sort-form" action="/Products" method="get">
+                        <!-- Keep current filters active -->
+                        <input type="hidden" name="categoryId" value="@selectedCategory" />
+                        <input type="hidden" name="search" value="@ViewBag.SearchQuery" />
+                        <input type="hidden" name="minPrice" value="@ViewBag.MinPrice" />
+                        <input type="hidden" name="maxPrice" value="@ViewBag.MaxPrice" />
+
+                        <label for="sortBy">Sắp xếp theo:</label>
+                        <select name="sortBy" id="sortBy" onchange="document.getElementById('sort-form').submit()">
+                            <option value="newest" selected="@(ViewBag.SortBy == "newest" ? "selected" : null)">Mới nhất</option>
+                            <option value="price_asc" selected="@(ViewBag.SortBy == "price_asc" ? "selected" : null)">Giá: Thấp đến Cao</option>
+                            <option value="price_desc" selected="@(ViewBag.SortBy == "price_desc" ? "selected" : null)">Giá: Cao đến Thấp</option>
+                            <option value="name_asc" selected="@(ViewBag.SortBy == "name_asc" ? "selected" : null)">Tên: A-Z</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            @if (Model.Any())
+            {
+                <div class="products-grid-3">
+                    @foreach (var product in Model)
+                    {
+                        <partial name="_ProductCard" model="product" />
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-results-box">
+                    <div class="empty-icon"><i class="fas fa-search-minus"></i></div>
+                    <h3>Không tìm thấy sản phẩm nào!</h3>
+                    <p>Vui lòng thử lại với các bộ lọc khác hoặc nhập từ khóa tìm kiếm mới.</p>
+                    <a href="/Products" class="btn btn-red">Đặt lại bộ lọc</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

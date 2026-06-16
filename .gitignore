@@ -1,0 +1,30 @@
+## Build outputs
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+## Visual Studio cache and settings
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## User-specific files
+*.rsuser
+*.suo
+*.user
+*.userprefs
+*.db
+*.local
+
+## Rider
+.idea/
+
+## VS Code
+.vscode/
+
+## Operating System files
+Thumbs.db
+ehthumbs.db
+Desktop.ini

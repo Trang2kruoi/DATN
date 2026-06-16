@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Protech Systems</title>
+    
+    <!-- Meta Descriptions for SEO -->
+    <meta name="description" content="Protech Systems - Website thương mại điện tử mua sắm điện thoại, laptop, thiết bị âm thanh và phụ kiện công nghệ chính hãng giá tốt nhất thị trường." />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/product.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/cart.css" asp-append-version="true" />
+</head>
+<body>
+    
+    <!-- Application Header -->
+    <partial name="_Header" />
+
+    <!-- Toast Alert Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Alert Notification (TempData) -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="container margin-top-15">
+            <div class="alert alert-success alert-dismissible">
+                <span><i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]</span>
+                <button type="button" class="alert-close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+            </div>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="container margin-top-15">
+            <div class="alert alert-danger alert-dismissible">
+                <span><i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]</span>
+                <button type="button" class="alert-close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+            </div>
+        </div>
+    }
+
+    <!-- Main Content Body -->
+    <main role="main" class="main-body-container">
+        @RenderBody()
+    </main>
+
+    <!-- Application Footer -->
+    <partial name="_Footer" />
+
+    <!-- Core Javascript Scripts -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/cart.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

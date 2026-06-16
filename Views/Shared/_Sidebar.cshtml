@@ -1,0 +1,85 @@
+@{
+    var categories = ViewBag.Categories as List<DATN.Models.Category> ?? new List<DATN.Models.Category>();
+    int? selectedCategory = ViewBag.SelectedCategory as int?;
+    decimal? minPrice = ViewBag.MinPrice as decimal?;
+    decimal? maxPrice = ViewBag.MaxPrice as decimal?;
+    string? sortBy = ViewBag.SortBy as string;
+    string? search = ViewBag.SearchQuery as string;
+}
+
+<aside class="sidebar-filters">
+    <!-- Categories List -->
+    <div class="filter-section">
+        <h4 class="filter-title">Danh mục sản phẩm</h4>
+        <ul class="filter-list">
+            <li>
+                <a href="/Products?search=@search&minPrice=@minPrice&maxPrice=@maxPrice&sortBy=@sortBy" 
+                   class="@(!selectedCategory.HasValue || selectedCategory == 0 ? "active" : "")">
+                   Tất cả sản phẩm
+                </a>
+            </li>
+            @foreach (var cat in categories)
+            {
+                <li>
+                    <a href="/Products?categoryId=@cat.Id&search=@search&minPrice=@minPrice&maxPrice=@maxPrice&sortBy=@sortBy"
+                       class="@(selectedCategory == cat.Id ? "active" : "")">
+                       @cat.Name
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <!-- Price Filters -->
+    <div class="filter-section">
+        <h4 class="filter-title">Lọc theo giá</h4>
+        <ul class="filter-list">
+            <li>
+                <a href="/Products?categoryId=@selectedCategory&search=@search&sortBy=@sortBy"
+                   class="@(!minPrice.HasValue && !maxPrice.HasValue ? "active" : "")">
+                   Tất cả mức giá
+                </a>
+            </li>
+            <li>
+                <a href="/Products?categoryId=@selectedCategory&search=@search&maxPrice=2000000&sortBy=@sortBy"
+                   class="@(maxPrice == 2000000 && !minPrice.HasValue ? "active" : "")">
+                   Dưới 2.000.000 đ
+                </a>
+            </li>
+            <li>
+                <a href="/Products?categoryId=@selectedCategory&search=@search&minPrice=2000000&maxPrice=10000000&sortBy=@sortBy"
+                   class="@(minPrice == 2000000 && maxPrice == 10000000 ? "active" : "")">
+                   2.000.000 đ - 10.000.000 đ
+                </a>
+            </li>
+            <li>
+                <a href="/Products?categoryId=@selectedCategory&search=@search&minPrice=10000000&maxPrice=25000000&sortBy=@sortBy"
+                   class="@(minPrice == 10000000 && maxPrice == 25000000 ? "active" : "")">
+                   10.000.000 đ - 25.000.000 đ
+                </a>
+            </li>
+            <li>
+                <a href="/Products?categoryId=@selectedCategory&search=@search&minPrice=25000000&sortBy=@sortBy"
+                   class="@(minPrice == 25000000 && !maxPrice.HasValue ? "active" : "")">
+                   Trên 25.000.000 đ
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Manual Price Form -->
+    <div class="filter-section">
+        <h4 class="filter-title">Khoảng giá tự nhập</h4>
+        <form action="/Products" method="get" class="price-range-form">
+            <input type="hidden" name="categoryId" value="@selectedCategory" />
+            <input type="hidden" name="search" value="@search" />
+            <input type="hidden" name="sortBy" value="@sortBy" />
+            <div class="price-inputs">
+                <input type="number" name="minPrice" placeholder="Từ đ" value="@(minPrice?.ToString("F0"))" min="0" />
+                <span>-</span>
+                <input type="number" name="maxPrice" placeholder="Đến đ" value="@(maxPrice?.ToString("F0"))" min="0" />
+            </div>
+            <button type="submit" class="btn-filter-price">Áp dụng</button>
+        </form>
+    </div>
+</aside>

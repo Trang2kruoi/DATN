@@ -1,0 +1,137 @@
+@{
+    ViewData["Title"] = "Trang chủ";
+    var categories = ViewBag.Categories as List<DATN.Models.Category> ?? new List<DATN.Models.Category>();
+    var featuredProducts = ViewBag.FeaturedProducts as List<DATN.Models.Product> ?? new List<DATN.Models.Product>();
+    var saleProducts = ViewBag.SaleProducts as List<DATN.Models.Product> ?? new List<DATN.Models.Product>();
+    var bestSellers = ViewBag.BestSellers as List<DATN.Models.Product> ?? new List<DATN.Models.Product>();
+}
+
+<!-- Hero Banner Slider Section -->
+<section class="hero-banner-section">
+    <div class="hero-slider">
+        <div class="slide active" style="background-image: linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop');">
+            <div class="container hero-content">
+                <span class="hero-badge"><i class="fab fa-apple"></i> Mới Ra Mắt 2026</span>
+                <h1 class="hero-title">MacBook Pro M4 Pro<br/>Sức Mạnh Vượt Giới Hạn</h1>
+                <p class="hero-description">Chip Apple M4 Pro 14 nhân, màn hình Liquid Retina XDR 16 inch, pin 22 giờ sử dụng liên tục. Hiệu năng AI mạnh mẽ nhất từ trước đến nay.</p>
+                <div class="hero-actions">
+                    <a href="/Products?categoryId=2" class="btn btn-red btn-large"><i class="fas fa-shopping-bag"></i> Mua ngay</a>
+                    <a href="/Products" class="btn btn-white btn-large"><i class="fas fa-th-large"></i> Khám phá sản phẩm</a>
+                </div>
+            </div>
+        </div>
+        <div class="slide" style="background-image: linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.25)), url('https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?q=80&w=1200&auto=format&fit=crop');">
+            <div class="container hero-content">
+                <span class="hero-badge"><i class="fas fa-bolt"></i> Hot Deal Tháng 6</span>
+                <h1 class="hero-title">Samsung Galaxy S25 Ultra<br/>Kỷ Nguyên AI Phone</h1>
+                <p class="hero-description">Galaxy AI tích hợp toàn diện, camera 200MP zoom quang 100x, khung viền Titanium siêu bền. Giảm đến 20% khi đặt hàng trực tuyến.</p>
+                <div class="hero-actions">
+                    <a href="/Products?categoryId=1" class="btn btn-red btn-large"><i class="fas fa-fire"></i> Xem ưu đãi</a>
+                    <a href="/Products" class="btn btn-white btn-large"><i class="fas fa-th-large"></i> Tất cả sản phẩm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-slider-controls">
+        <button class="slider-btn slider-prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+        <div class="slider-dots" id="slider-dots"></div>
+        <button class="slider-btn slider-next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</section>
+
+<!-- Category Circles Section -->
+<section class="home-categories-section container">
+    <div class="section-header">
+        <h2 class="section-title">Danh mục nổi bật</h2>
+        <p class="section-subtitle">Tìm kiếm nhanh các thiết bị công nghệ hàng đầu</p>
+    </div>
+    <div class="categories-grid">
+        @foreach (var cat in categories)
+        {
+            var iconClass = "fa-mobile-alt";
+            var bgClass = "bg-red-light";
+            if (cat.Slug == "laptop") { iconClass = "fa-laptop"; bgClass = "bg-blue-light"; }
+            else if (cat.Slug == "may-tinh-bang") { iconClass = "fa-tablet-alt"; bgClass = "bg-green-light"; }
+            else if (cat.Slug == "thiet-bi-am-thanh") { iconClass = "fa-headphones"; bgClass = "bg-orange-light"; }
+            else if (cat.Slug == "phu-kien") { iconClass = "fa-plug"; bgClass = "bg-purple-light"; }
+
+            <a href="/Products?categoryId=@cat.Id" class="category-card-item">
+                <div class="category-icon-circle @bgClass">
+                    <i class="fas @iconClass"></i>
+                </div>
+                <h4 class="category-card-name">@cat.Name</h4>
+            </a>
+        }
+    </div>
+</section>
+
+<!-- Hot Sale Section -->
+<section class="home-shelf-section bg-light-gray">
+    <div class="container">
+        <div class="section-header-flex">
+            <div>
+                <h2 class="section-title text-red"><i class="fas fa-fire"></i> Khuyến mãi cực HOT</h2>
+                <p class="section-subtitle">Săn ngay sản phẩm công nghệ giá tốt nhất trong hôm nay</p>
+            </div>
+            <a href="/Products?sortBy=price_asc" class="btn-view-all">Xem tất cả <i class="fas fa-chevron-right"></i></a>
+        </div>
+        <div class="products-grid-5">
+            @foreach (var product in saleProducts)
+            {
+                <partial name="_ProductCard" model="product" />
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Featured Section -->
+<section class="home-shelf-section container">
+    <div class="section-header-flex">
+        <div>
+            <h2 class="section-title"><i class="fas fa-star text-gold"></i> Sản phẩm nổi bật</h2>
+            <p class="section-subtitle">Những mẫu máy được ưa chuộng và đánh giá tốt nhất</p>
+        </div>
+        <a href="/Products" class="btn-view-all">Xem tất cả <i class="fas fa-chevron-right"></i></a>
+    </div>
+    <div class="products-grid-5">
+        @foreach (var product in featuredProducts)
+        {
+            <partial name="_ProductCard" model="product" />
+        }
+    </div>
+</section>
+
+<!-- Best Seller Banner Section -->
+<section class="home-promo-banner container">
+    <div class="promo-banner-grid">
+        <div class="promo-banner-card bg-gradient-dark" style="background-image: linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1593642632823-8f785ba67e45?q=80&w=600&auto=format&fit=crop');">
+            <h3>ROG Zephyrus G14</h3>
+            <p>Trải nghiệm chiến game mượt mà với siêu phẩm mỏng nhẹ từ nhà ASUS.</p>
+            <a href="/Products/Details/9" class="btn btn-red btn-small">Khám phá</a>
+        </div>
+        <div class="promo-banner-card bg-gradient-red" style="background-image: linear-gradient(to right, rgba(229,57,53,0.9), rgba(229,57,53,0.5)), url('https://images.unsplash.com/photo-1588449668338-d134ac2c384f?q=80&w=600&auto=format&fit=crop');">
+            <h3>Âm Thanh Đích Thực</h3>
+            <p>Sắm ngay AirPods Pro thế hệ mới, hỗ trợ khử ồn cực chất giảm đến 20%.</p>
+            <a href="/Products?categoryId=4" class="btn btn-white btn-small">Mua ngay</a>
+        </div>
+    </div>
+</section>
+
+<!-- Best Seller Section -->
+<section class="home-shelf-section bg-light-gray">
+    <div class="container">
+        <div class="section-header-flex">
+            <div>
+                <h2 class="section-title"><i class="fas fa-shopping-bag text-red"></i> Sản phẩm bán chạy</h2>
+                <p class="section-subtitle">Những thiết bị cháy hàng liên tục tại showroom</p>
+            </div>
+            <a href="/Products/BestSellers" class="btn-view-all">Xem tất cả <i class="fas fa-chevron-right"></i></a>
+        </div>
+        <div class="products-grid-5">
+            @foreach (var product in bestSellers)
+            {
+                <partial name="_ProductCard" model="product" />
+            }
+        </div>
+    </div>
+</section>

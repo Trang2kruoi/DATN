@@ -1,0 +1,66 @@
+@model DATN.Models.Article
+
+@{
+    ViewData["Title"] = Model.Title;
+    var recentArticles = ViewBag.RecentArticles as List<DATN.Models.Article> ?? new List<DATN.Models.Article>();
+}
+
+<div class="breadcrumb-container">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/">Trang chủ</a></li>
+            <li><a href="/Articles">Tin tức</a></li>
+            <li>@Model.Title</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container margin-bottom-50">
+    <div class="article-detail-layout">
+        <!-- Main Article Content -->
+        <article class="article-main-content">
+            <header class="article-header">
+                <span class="article-meta-date"><i class="far fa-calendar-alt"></i> Đăng ngày @Model.CreatedDate.ToString("dd/MM/yyyy")</span>
+                <h1 class="article-detail-title">@Model.Title</h1>
+                <p class="article-detail-summary">@Model.Summary</p>
+            </header>
+            
+            <div class="article-banner-img">
+                <img src="@Model.ImageUrl" alt="@Model.Title" class="rounded shadow" />
+            </div>
+
+            <div class="article-body-content html-content">
+                @Html.Raw(Model.Content)
+            </div>
+            
+            <div class="article-author-card">
+                <div class="author-avatar"><i class="fas fa-user-edit"></i></div>
+                <div class="author-info">
+                    <strong>Biên tập viên Protech Systems</strong>
+                    <span>Chuyên viên tổng hợp tin tức công nghệ và đánh giá thiết bị thông minh.</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Sidebar Recent Articles -->
+        <aside class="article-sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">Bài viết gần đây</h3>
+                <ul class="recent-posts-list">
+                    @foreach (var recent in recentArticles)
+                    {
+                        <li>
+                            <a href="/Articles/Details/@recent.Id" class="recent-post-item">
+                                <img src="@recent.ImageUrl" alt="@recent.Title" class="recent-post-thumb" />
+                                <div class="recent-post-details">
+                                    <h4>@recent.Title</h4>
+                                    <span>@recent.CreatedDate.ToString("dd/MM/yyyy")</span>
+                                </div>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </aside>
+    </div>
+</div>

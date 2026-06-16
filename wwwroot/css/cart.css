@@ -1,0 +1,527 @@
+/* ==========================================================================
+   Smyou Pro Shopping Cart & Checkout Stylesheet (cart.css)
+   ========================================================================== */
+
+/* 1. Shopping Cart Layout */
+.cart-layout {
+    display: grid;
+    grid-template-columns: 8fr 4fr;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.cart-table-container {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.cart-table th {
+    background-color: var(--bg-gray);
+    padding: 15px 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.cart-table td {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color-light);
+    vertical-align: middle;
+}
+
+.cart-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Columns Details */
+.td-img {
+    width: 100px;
+}
+
+.cart-item-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border: 1px solid var(--border-color-light);
+    border-radius: 4px;
+    background-color: white;
+}
+
+.td-name {
+    max-width: 250px;
+}
+
+.cart-item-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: block;
+    line-height: 1.4;
+    margin-bottom: 5px;
+}
+
+.cart-item-name:hover {
+    color: var(--primary-red);
+}
+
+.cart-item-sku {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.price-val {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.cart-qty-control {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    width: 100px;
+    height: 32px;
+}
+
+.btn-cart-qty {
+    background-color: var(--bg-gray);
+    border: none;
+    width: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition-speed);
+}
+
+.btn-cart-qty:hover {
+    background-color: #e0e0e0;
+}
+
+.cart-qty-input {
+    width: 40px;
+    border: none;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.btn-remove-item {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: color var(--transition-speed);
+}
+
+.btn-remove-item:hover {
+    color: var(--primary-red);
+}
+
+.cart-actions-row {
+    padding: 15px 20px;
+    background-color: var(--bg-gray);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Order Summary Card */
+.cart-summary-card {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-large);
+    padding: 30px;
+    box-shadow: var(--box-shadow-soft);
+    height: fit-content;
+}
+
+.summary-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-color-light);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    color: var(--text-dark);
+}
+
+.summary-divider {
+    border: none;
+    border-top: 1px solid var(--border-color-light);
+    margin: 15px 0;
+}
+
+.total-row {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.vat-note {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 8px;
+}
+
+/* Empty cart layout */
+.empty-cart-box {
+    padding: 80px 20px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-large);
+    background-color: var(--bg-gray);
+    max-width: 600px;
+    margin: 40px auto;
+}
+
+.empty-cart-box h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.empty-cart-box p {
+    color: var(--text-muted);
+    margin-bottom: 25px;
+}
+
+/* 2. Checkout Page Layout */
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+.checkout-form-container {
+    background-color: white;
+}
+
+.checkout-section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--border-color-light);
+    padding-bottom: 10px;
+}
+
+/* Form specifics for checkout */
+.checkout-form .form-group input,
+.checkout-form .form-group textarea {
+    border-color: #ccc;
+}
+
+.checkout-payment-methods {
+    margin-top: 30px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    background-color: var(--bg-gray);
+}
+
+.payment-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.payment-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.payment-option input {
+    margin-top: 5px;
+}
+
+.payment-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+/* Checkout side Summary Panel */
+.checkout-summary-card {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-large);
+    padding: 30px;
+    box-shadow: var(--box-shadow-soft);
+    align-self: start;
+}
+
+.checkout-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding-right: 5px;
+}
+
+.checkout-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.item-img-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.item-img-title img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border: 1px solid var(--border-color-light);
+    border-radius: 4px;
+}
+
+.item-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.item-qty {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.item-price {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.safety-promise {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 20px;
+    border-top: 1px solid var(--border-color-light);
+    padding-top: 15px;
+}
+
+.safety-promise i {
+    font-size: 1rem;
+    color: var(--success-green);
+}
+
+/* 3. Checkout Success Card Page */
+.success-card {
+    background-color: white;
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius-large);
+    padding: 50px;
+    box-shadow: var(--box-shadow-soft);
+    max-width: 750px;
+    margin: 40px auto;
+}
+
+.success-icon-wrapper {
+    font-size: 4.5rem;
+    color: var(--success-green);
+    margin-bottom: 20px;
+}
+
+.success-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.success-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+
+.success-info {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+}
+
+.success-details-box {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    background-color: var(--bg-gray);
+}
+
+.success-details-box h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+
+.details-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 30px;
+    font-size: 0.9rem;
+}
+
+.details-grid-2 .span-2 {
+    grid-column: span 2;
+}
+
+.details-grid-2 div {
+    display: flex;
+    flex-direction: column;
+}
+
+.details-grid-2 span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 3px;
+}
+
+.order-success-items {
+    font-size: 0.9rem;
+}
+
+.success-item-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.success-item-name-qty {
+    display: flex;
+    gap: 15px;
+}
+
+.product-name-txt {
+    font-weight: 600;
+}
+
+.product-qty-txt {
+    color: var(--text-muted);
+}
+
+.success-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+/* Responsiveness for Cart elements */
+@media (max-width: 992px) {
+    .cart-layout {
+        grid-template-columns: 1fr;
+    }
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Collapsing Shopping Cart table into Card blocks on mobile */
+    .cart-table, .cart-table thead, .cart-table tbody, .cart-table th, .cart-table td, .cart-table tr {
+        display: block;
+    }
+    
+    .cart-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    .cart-table tr {
+        border: 1px solid var(--border-color);
+        margin-bottom: 15px;
+        border-radius: var(--border-radius);
+        padding: 15px;
+        position: relative;
+    }
+    
+    .cart-table td {
+        border: none;
+        padding: 8px 0;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+    
+    .cart-table td::before {
+        position: absolute;
+        top: 8px;
+        left: 0;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        text-align: left;
+    }
+    
+    .cart-table td.td-img {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding-left: 0;
+    }
+    
+    .cart-table td.td-img::before {
+        display: none;
+    }
+    
+    .cart-table td.td-name {
+        max-width: 100%;
+        padding-left: 0;
+        text-align: center;
+    }
+    
+    .cart-table td.td-name::before {
+        display: none;
+    }
+    
+    .cart-table td.td-price::before { content: "Giá:"; }
+    .cart-table td.td-qty::before { content: "Số lượng:"; }
+    .cart-table td.td-total::before { content: "Tổng:"; }
+    .cart-table td.td-action::before { content: "Hành động:"; }
+    
+    .cart-qty-control {
+        margin-left: auto;
+    }
+    
+    .details-grid-2 {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .details-grid-2 .span-2 {
+        grid-column: span 1;
+    }
+}

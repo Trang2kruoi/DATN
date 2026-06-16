@@ -1,0 +1,99 @@
+@model DATN.Models.RecruitmentPost
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="breadcrumb-container">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/">Trang chủ</a></li>
+            <li><a href="/Recruitment">Tuyển dụng</a></li>
+            <li>Chi tiết công việc</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container margin-bottom-50">
+    <div class="job-detail-layout">
+        <!-- Main Job Info -->
+        <div class="job-main-info">
+            <h1 class="job-detail-title">@Model.Title</h1>
+            
+            <div class="job-detail-meta-box">
+                <div class="meta-item">
+                    <span class="meta-label">Bộ phận:</span>
+                    <strong class="text-dark">@Model.Department</strong>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Địa điểm:</span>
+                    <strong class="text-dark">@Model.Location</strong>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Mức lương:</span>
+                    <strong class="text-red">@Model.SalaryRange</strong>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Hạn nộp hồ sơ:</span>
+                    <strong class="text-dark">@Model.Deadline.ToString("dd/MM/yyyy")</strong>
+                </div>
+            </div>
+
+            <!-- Job details blocks -->
+            <div class="job-detail-section">
+                <h3><i class="fas fa-tasks text-red"></i> Mô tả công việc</h3>
+                <div class="job-content-text">
+                    @foreach (var line in Model.Description.Split('\n'))
+                    {
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+                        <p>@line</p>
+                    }
+                </div>
+            </div>
+
+            <div class="job-detail-section">
+                <h3><i class="fas fa-user-check text-red"></i> Yêu cầu ứng viên</h3>
+                <div class="job-content-text">
+                    @foreach (var line in Model.Requirements.Split('\n'))
+                    {
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+                        <p>@line</p>
+                    }
+                </div>
+            </div>
+
+            <div class="job-detail-section">
+                <h3><i class="fas fa-gift text-red"></i> Quyền lợi được hưởng</h3>
+                <div class="job-content-text">
+                    @foreach (var line in Model.Benefits.Split('\n'))
+                    {
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+                        <p>@line</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar / Action Card -->
+        <div class="job-sidebar-card">
+            <h3 class="card-title">Ứng tuyển vị trí này</h3>
+            <p class="card-desc">Gửi thông tin liên hệ và link CV của bạn trực tiếp qua hệ thống của chúng tôi để được xét duyệt nhanh nhất.</p>
+            <div class="card-deadline-info">
+                <i class="far fa-calendar-times"></i> Hạn nhận hồ sơ:<br />
+                <strong>@Model.Deadline.ToString("dd/MM/yyyy")</strong>
+            </div>
+            
+            <a href="/Recruitment/Apply/@Model.Id" class="btn btn-red btn-block btn-large text-center margin-top-20">
+                Ứng tuyển ngay <i class="fas fa-paper-plane"></i>
+            </a>
+            
+            <hr class="divider" />
+            <div class="recruitment-contact-helper">
+                <span>Bạn cần hỗ trợ?</span>
+                <strong>Bộ phận Tuyển dụng</strong>
+                <span><i class="fas fa-phone-alt"></i> 0243 789 999 (Ext 102)</span>
+                <span><i class="fas fa-envelope"></i> hr@smyoupro.com.vn</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+@model DATN.Models.Product
+
+@{
+    var discountPercent = 0;
+    if (Model.OriginalPrice.HasValue && Model.OriginalPrice.Value > Model.Price)
+    {
+        discountPercent = (int)Math.Round((double)((Model.OriginalPrice.Value - Model.Price) / Model.OriginalPrice.Value * 100));
+    }
+}
+
+<div class="product-card">
+    <!-- Badges -->
+    <div class="product-badges">
+        @if (Model.IsSale && discountPercent > 0)
+        {
+            <span class="badge badge-sale">-@discountPercent% OFF</span>
+        }
+        @if (Model.IsBestSeller)
+        {
+            <span class="badge badge-hot">HOT</span>
+        }
+    </div>
+
+    <!-- Product Image -->
+    <div class="product-card-img">
+        <a href="/Products/Details/@Model.Id">
+            <img src="@Model.ImageUrl" alt="@Model.Name" loading="lazy" />
+        </a>
+    </div>
+
+    <!-- Product Details -->
+    <div class="product-card-body">
+        <span class="product-brand">@Model.Brand?.Name</span>
+        <h3 class="product-name">
+            <a href="/Products/Details/@Model.Id" title="@Model.Name">@Model.Name</a>
+        </h3>
+        
+        <!-- Pricing -->
+        <div class="product-price-row">
+            <span class="price-current">@Model.Price.ToString("N0")&nbsp;đ</span>
+            @if (Model.OriginalPrice.HasValue && Model.OriginalPrice.Value > Model.Price)
+            {
+                <span class="price-old">@Model.OriginalPrice.Value.ToString("N0")&nbsp;đ</span>
+            }
+        </div>
+    </div>
+
+    <!-- Actions Footer -->
+    <div class="product-card-actions">
+        <!-- Add To Cart Form -->
+        <form action="/Cart/AddToCart" method="post" class="add-to-cart-form ajax-cart-form">
+            <input type="hidden" name="productId" value="@Model.Id" />
+            <input type="hidden" name="quantity" value="1" />
+            <button type="submit" class="btn-icon-add" title="Thêm vào giỏ hàng">
+                <i class="fas fa-cart-plus"></i>
+            </button>
+        </form>
+
+        <!-- Buy Now Form -->
+        <form action="/Cart/AddToCart" method="post" class="buy-now-form">
+            <input type="hidden" name="productId" value="@Model.Id" />
+            <input type="hidden" name="quantity" value="1" />
+            <input type="hidden" name="buyNow" value="true" />
+            <button type="submit" class="btn-buy-now">
+                Mua ngay
+            </button>
+        </form>
+    </div>
+</div>

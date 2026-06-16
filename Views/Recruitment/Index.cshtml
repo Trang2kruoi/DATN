@@ -1,0 +1,60 @@
+@model IEnumerable<DATN.Models.RecruitmentPost>
+
+@{
+    ViewData["Title"] = "Tuyển dụng";
+}
+
+<div class="breadcrumb-container">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/">Trang chủ</a></li>
+            <li>Tuyển dụng</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container margin-bottom-50">
+    <div class="recruitment-hero" style="background-image: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop');">
+        <div class="hero-inner">
+            <span class="hero-tag">GIA NHẬP ĐỘI NGŨ SMYOU PRO</span>
+            <h1>Kiến tạo tương lai công nghệ</h1>
+            <p>Chúng tôi luôn chào đón những ứng viên năng động, sáng tạo và nhiệt huyết cùng đồng hành trên chặng đường phát triển mới.</p>
+        </div>
+    </div>
+
+    <div class="margin-top-40">
+        <h2 class="section-title text-center">Vị trí đang tuyển dụng</h2>
+        <p class="section-subtitle text-center">Tìm kiếm cơ hội việc làm phù hợp nhất với bạn</p>
+        
+        @if (Model.Any())
+        {
+            <div class="jobs-list margin-top-30">
+                @foreach (var job in Model)
+                {
+                    <div class="job-item-card">
+                        <div class="job-info-left">
+                            <h3 class="job-card-title">@job.Title</h3>
+                            <div class="job-meta-row">
+                                <span><i class="fas fa-briefcase"></i> @job.Department</span>
+                                <span><i class="fas fa-map-marker-alt"></i> @job.Location</span>
+                                <span><i class="fas fa-money-bill-wave"></i> @job.SalaryRange</span>
+                            </div>
+                        </div>
+                        <div class="job-action-right">
+                            <span class="job-deadline"><i class="far fa-clock"></i> Hạn nộp: @job.Deadline.ToString("dd/MM/yyyy")</span>
+                            <a href="/Recruitment/Details/@job.Id" class="btn btn-red">Ứng tuyển ngay</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center padding-50 border rounded bg-light">
+                <i class="fas fa-user-clock text-muted size-large"></i>
+                <h3 class="margin-top-15">Hiện tại chưa có vị trí mới!</h3>
+                <p class="text-muted">Chúng tôi tạm thời chưa tuyển vị trí mới. Bạn vui lòng quay lại sau hoặc gửi CV trực tiếp qua email tuyển dụng.</p>
+            </div>
+        }
+    </div>
+</div>

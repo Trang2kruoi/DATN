@@ -1,0 +1,113 @@
+@model DATN.Models.ContactMessage
+
+@{
+    ViewData["Title"] = "Liên hệ";
+}
+
+<div class="breadcrumb-container">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/">Trang chủ</a></li>
+            <li>Liên hệ</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container margin-bottom-50">
+    <h1 class="page-title"><i class="fas fa-map-marked-alt text-red"></i> Liên hệ với chúng tôi</h1>
+    <p class="page-subtitle">Gửi mọi thắc mắc, phản hồi hoặc yêu cầu hỗ trợ. Đội ngũ CSKH sẽ phản hồi bạn sớm nhất có thể.</p>
+
+    <div class="contact-grid">
+        <!-- Left: Contact Details & Map -->
+        <div class="contact-info-panel">
+            <h3 class="contact-section-title">Hệ thống Cửa hàng Protech Systems</h3>
+            
+            <div class="contact-info-list">
+                <div class="info-item">
+                    <i class="fas fa-building text-red"></i>
+                    <div>
+                        <strong>Trụ sở chính:</strong>
+                        <p>123 Đường Trần Hưng Đạo, Quận 1, TP. Hồ Chí Minh</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-store text-red"></i>
+                    <div>
+                        <strong>Showroom Quận 7:</strong>
+                        <p>456 Đường Nguyễn Thị Thập, Quận 7, TP. Hồ Chí Minh</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-phone-alt text-red"></i>
+                    <div>
+                        <strong>Hotline hỗ trợ:</strong>
+                        <p>1800 6789 (miễn phí) hoặc <a href="tel:19001234">1900 1234</a></p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-envelope text-red"></i>
+                    <div>
+                        <strong>Địa chỉ Email:</strong>
+                        <p>support@protechsystems.com.vn | sales@protechsystems.com.vn</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Mockup -->
+            <div class="map-mockup rounded border margin-top-30">
+                <iframe src="https://www.google.com/maps/embed?pb=!11m18!1m12!1m3!1d3919.4602324262963!2d106.6943664746972!3d10.77601948937299!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3919.4602324262963!2zMTIzIFRy4bqnbiBIxrBuZyDEkOG6oW8sIFF14bqtbiAxLCBUUC4gSENN!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s" 
+                        width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+
+        <!-- Right: Feedback Form -->
+        <div class="contact-form-container">
+            <h3 class="contact-section-title">Gửi tin nhắn cho chúng tôi</h3>
+            
+            <form action="/Contact" method="post" class="contact-form">
+                @Html.AntiForgeryToken()
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                    </div>
+                }
+
+                <div class="form-group">
+                    <label for="FullName">Họ và tên <span class="text-red">*</span></label>
+                    <input type="text" id="FullName" name="FullName" value="@Model.FullName" placeholder="Họ và tên của bạn" required />
+                    <span asp-validation-for="FullName" class="text-red"></span>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="Email">Địa chỉ Email <span class="text-red">*</span></label>
+                        <input type="email" id="Email" name="Email" value="@Model.Email" placeholder="ví dụ: email@gmail.com" required />
+                        <span asp-validation-for="Email" class="text-red"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PhoneNumber">Số điện thoại</label>
+                        <input type="tel" id="PhoneNumber" name="PhoneNumber" value="@Model.PhoneNumber" placeholder="Số điện thoại của bạn (tùy chọn)" />
+                        <span asp-validation-for="PhoneNumber" class="text-red"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Subject">Tiêu đề liên hệ <span class="text-red">*</span></label>
+                    <input type="text" id="Subject" name="Subject" value="@Model.Subject" placeholder="Chủ đề bạn cần hỗ trợ" required />
+                    <span asp-validation-for="Subject" class="text-red"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="Message">Nội dung chi tiết <span class="text-red">*</span></label>
+                    <textarea id="Message" name="Message" rows="5" placeholder="Nhập câu hỏi hoặc phản hồi của bạn..." required>@Model.Message</textarea>
+                    <span asp-validation-for="Message" class="text-red"></span>
+                </div>
+
+                <button type="submit" class="btn btn-red btn-large">Gửi tin nhắn <i class="far fa-paper-plane"></i></button>
+            </form>
+        </div>
+    </div>
+</div>

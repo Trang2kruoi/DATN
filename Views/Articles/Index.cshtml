@@ -1,0 +1,47 @@
+@model IEnumerable<DATN.Models.Article>
+
+@{
+    ViewData["Title"] = "Tin tức Công nghệ";
+}
+
+<div class="breadcrumb-container">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/">Trang chủ</a></li>
+            <li>Tin tức & Bài viết</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container margin-bottom-50">
+    <h1 class="page-title"><i class="far fa-newspaper text-red"></i> Tin tức & Bài viết Công nghệ</h1>
+    <p class="page-subtitle">Cập nhật tin tức công nghệ mới nhất, đánh giá sản phẩm và hướng dẫn mua sắm.</p>
+
+    @if (Model.Any())
+    {
+        <div class="articles-grid">
+            @foreach (var article in Model)
+            {
+                <div class="article-card">
+                    <div class="article-card-img">
+                        <a href="/Articles/Details/@article.Id">
+                            <img src="@article.ImageUrl" alt="@article.Title" />
+                        </a>
+                    </div>
+                    <div class="article-card-body">
+                        <span class="article-date"><i class="far fa-calendar-alt"></i> @article.CreatedDate.ToString("dd/MM/yyyy")</span>
+                        <h3 class="article-title">
+                            <a href="/Articles/Details/@article.Id">@article.Title</a>
+                        </h3>
+                        <p class="article-summary">@article.Summary</p>
+                        <a href="/Articles/Details/@article.Id" class="btn-read-more">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-center text-muted">Hiện tại chưa có bài viết nào được đăng.</p>
+    }
+</div>

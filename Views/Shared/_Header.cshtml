@@ -1,0 +1,71 @@
+<header class="main-header">
+    <div class="header-top">
+        <div class="container header-top-flex">
+            <div class="hotline-info">
+                <i class="fas fa-phone-alt"></i> Hotline: <a href="tel:19001234"><strong>1900 1234</strong></a>
+                <span class="header-top-divider">|</span>
+                <i class="fas fa-envelope"></i> <a href="mailto:support@protechsystems.com.vn">support@protechsystems.com.vn</a>
+            </div>
+            <div class="header-top-links">
+                <a href="/Home/About"><i class="fas fa-info-circle"></i> Giới thiệu</a>
+                <a href="/Contact"><i class="fas fa-map-marker-alt"></i> Liên hệ</a>
+                <a href="/Recruitment"><i class="fas fa-briefcase"></i> Tuyển dụng</a>
+            </div>
+        </div>
+    </div>
+    <div class="header-middle">
+        <div class="container header-middle-flex">
+            <!-- Logo -->
+            <a href="/" class="logo">
+                <span class="logo-icon"><i class="fas fa-microchip"></i></span>
+                <span class="logo-text">
+                    <span class="logo-red">Protech</span><span class="logo-black"> Systems</span>
+                </span>
+            </a>
+
+            <!-- Search Bar -->
+            <form action="/Products" method="get" class="search-form">
+                <div class="search-box">
+                    <input type="text" name="search" placeholder="Tìm kiếm sản phẩm, thương hiệu..." value="@ViewBag.SearchQuery" />
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+
+            <!-- Hotline & Cart -->
+            <div class="header-actions">
+                <div class="support-hotline">
+                    <div class="hotline-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="hotline-text">
+                        <span>Hỗ trợ 24/7</span>
+                        <strong>1800 6789</strong>
+                    </div>
+                </div>
+
+                <a href="/Cart" class="cart-btn">
+                    <div class="cart-icon-wrapper">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-badge" class="cart-badge">0</span>
+                    </div>
+                    <span class="cart-text">Giỏ hàng</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation Menu -->
+    <nav class="main-nav">
+        <div class="container">
+            <ul class="nav-menu">
+                <li><a href="/" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")"><i class="fas fa-home"></i> Trang chủ</a></li>
+                <li><a href="/Products" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Products" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")"><i class="fas fa-th-large"></i> Sản phẩm</a></li>
+                <li><a href="/Products/BestSellers" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Products" && ViewContext.RouteData.Values["Action"]?.ToString() == "BestSellers" ? "active" : "")"><i class="fas fa-fire"></i> Bán chạy</a></li>
+                <li><a href="/Articles" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Articles" ? "active" : "")"><i class="fas fa-newspaper"></i> Tin tức</a></li>
+                <li><a href="/Recruitment" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Recruitment" ? "active" : "")"><i class="fas fa-users"></i> Tuyển dụng</a></li>
+                <li><a href="/Home/About" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["Action"]?.ToString() == "About" ? "active" : "")"><i class="fas fa-building"></i> Giới thiệu</a></li>
+                <li><a href="/Contact" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Contact" ? "active" : "")"><i class="fas fa-envelope"></i> Liên hệ</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>

@@ -1,0 +1,214 @@
+@model DATN.Models.Product
+
+@{
+    ViewData["Title"] = Model.Name;
+    var relatedProducts = ViewBag.RelatedProducts as List<DATN.Models.Product> ?? new List<DATN.Models.Product>();
+    var discountPercent = 0;
+    if (Model.OriginalPrice.HasValue && Model.OriginalPrice.Value > Model.Price)
+    {
+        discountPercent = (int)Math.Round((double)((Model.OriginalPrice.Value - Model.Price) / Model.OriginalPrice.Value * 100));
+    }
+}
+
+<div class="breadcrumb-container">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/">Trang chủ</a></li>
+            <li><a href="/Products">Sản phẩm</a></li>
+            <li><a href="/Products?categoryId=@Model.CategoryId">@Model.Category?.Name</a></li>
+            <li>@Model.Name</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container margin-bottom-50">
+    <div class="product-details-grid">
+        <!-- Left: Image Gallery -->
+        <div class="product-gallery">
+            <div class="main-image-wrapper">
+                @if (Model.IsSale && discountPercent > 0)
+                {
+                    <span class="detail-badge-sale">-@discountPercent% OFF</span>
+                }
+                <img id="main-product-img" src="@Model.ImageUrl" alt="@Model.Name" class="rounded shadow" />
+            </div>
+        </div>
+
+        <!-- Right: Purchase Panel & Quick Info -->
+        <div class="product-info-panel">
+            <span class="info-brand">Thương hiệu: <strong>@Model.Brand?.Name</strong></span>
+            <h1 class="info-title">@Model.Name</h1>
+            
+            <div class="info-meta-row">
+                <span>SKU: <strong class="text-dark">@Model.SKU</strong></span>
+                <span>|</span>
+                <span>Tình trạng: 
+                    @if (Model.Stock > 0)
+                    {
+                        <strong class="text-green"><i class="fas fa-check"></i> Còn hàng (@Model.Stock)</strong>
+                    }
+                    else
+                    {
+                        <strong class="text-red"><i class="fas fa-times"></i> Hết hàng</strong>
+                    }
+                </span>
+            </div>
+
+            <!-- Price Box -->
+            <div class="info-price-box">
+                <div class="price-current-large">@Model.Price.ToString("N0")&nbsp;đ</div>
+                @if (Model.OriginalPrice.HasValue && Model.OriginalPrice.Value > Model.Price)
+                {
+                    <div class="price-old-large">@Model.OriginalPrice.Value.ToString("N0")&nbsp;đ</div>
+                    <div class="price-save">Tiết kiệm: @((Model.OriginalPrice.Value - Model.Price).ToString("N0"))&nbsp;đ</div>
+                }
+            </div>
+
+            <!-- Short description -->
+            <div class="info-description">
+                <p>@Model.Description</p>
+            </div>
+
+            <!-- Add to Cart controls -->
+            @if (Model.Stock > 0)
+            {
+                <div class="info-actions-box">
+                    <form action="/Cart/AddToCart" method="post" class="detail-purchase-form">
+                        <input type="hidden" name="productId" value="@Model.Id" />
+                        
+                        <div class="quantity-selector-row">
+                            <label for="detail-qty">Số lượng:</label>
+                            <div class="qty-control">
+                                <button type="button" onclick="adjustQty(-1)" class="btn-qty">-</button>
+                                <input type="number" id="detail-qty" name="quantity" value="1" min="1" max="@Model.Stock" readonly />
+                                <button type="button" onclick="adjustQty(1)" class="btn-qty">+</button>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons-row">
+                            <button type="submit" class="btn btn-red-outline btn-large btn-add-cart">
+                                <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
+                            </button>
+                            
+                            <button type="submit" name="buyNow" value="true" class="btn btn-red btn-large btn-buy">
+                                Mua ngay
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="out-of-stock-box">
+                    <button class="btn btn-gray btn-large" disabled>Hết hàng tạm thời</button>
+                    <p class="margin-top-10 text-muted">Vui lòng quay lại sau hoặc liên hệ Hotline để được tư vấn dòng sản phẩm tương đương.</p>
+                </div>
+            }
+
+            <!-- Services badge list -->
+            <div class="detail-service-promises">
+                <div class="promise-item">
+                    <i class="fas fa-truck-moving"></i>
+                    <span>Miễn phí vận chuyển toàn quốc</span>
+                </div>
+                <div class="promise-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Bảo hành chính hãng 12-24 tháng</span>
+                </div>
+                <div class="promise-item">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Đổi trả miễn phí trong 15 ngày</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Specifications and Description Tabs -->
+    <div class="details-tab-section">
+        <div class="tabs-header">
+            <button class="tab-btn active" onclick="switchTab(event, 'tab-spec')">Thông số kỹ thuật</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-desc')">Mô tả sản phẩm</button>
+        </div>
+        
+        <div class="tabs-content">
+            <!-- Specs Tab -->
+            <div id="tab-spec" class="tab-panel active">
+                @if (!string.IsNullOrEmpty(Model.Specifications))
+                {
+                    <table class="specs-table">
+                        <tbody>
+                            @foreach (var specLine in Model.Specifications.Split('\n'))
+                            {
+                                if (string.IsNullOrWhiteSpace(specLine)) continue;
+                                var parts = specLine.Split(':');
+                                var label = parts[0];
+                                var value = parts.Length > 1 ? parts[1] : "";
+                                <tr>
+                                    <td class="spec-label">@label.Trim()</td>
+                                    <td class="spec-val">@value.Trim()</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>Thông số kỹ thuật đang được cập nhật.</p>
+                }
+            </div>
+
+            <!-- Description Tab -->
+            <div id="tab-desc" class="tab-panel">
+                <div class="html-content">
+                    <p>@Model.Description</p>
+                    <p>Sản phẩm chính hãng, được phân phối trực tiếp tại các showroom của Protech Systems. Fullbox đầy đủ phụ kiện đi kèm theo hộp máy.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    @if (relatedProducts.Any())
+    {
+        <section class="related-products-section margin-top-50">
+            <div class="section-header">
+                <h2 class="section-title">Sản phẩm liên quan</h2>
+                <p class="section-subtitle">Có thể bạn sẽ quan tâm đến các sản phẩm này</p>
+            </div>
+            <div class="products-grid-4">
+                @foreach (var product in relatedProducts)
+                {
+                    <partial name="_ProductCard" model="product" />
+                }
+            </div>
+        </section>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function adjustQty(amount) {
+            var qtyInput = document.getElementById('detail-qty');
+            var currentVal = parseInt(qtyInput.value);
+            var maxVal = parseInt(qtyInput.getAttribute('max')) || 100;
+            var newVal = currentVal + amount;
+            if (newVal >= 1 && newVal <= maxVal) {
+                qtyInput.value = newVal;
+            }
+        }
+
+        function switchTab(evt, tabId) {
+            var i, tabContent, tabBtns;
+            tabContent = document.getElementsByClassName("tab-panel");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].classList.remove("active");
+            }
+            tabBtns = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove("active");
+            }
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+}

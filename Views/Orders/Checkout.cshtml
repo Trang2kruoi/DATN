@@ -1,0 +1,131 @@
+@model DATN.Models.Order
+
+@{
+    ViewData["Title"] = "Thanh toán";
+    var cart = ViewBag.Cart as List<DATN.Models.CartItem> ?? new List<DATN.Models.CartItem>();
+    decimal totalAmount = ViewBag.TotalAmount is decimal ? (decimal)ViewBag.TotalAmount : 0;
+}
+
+<div class="breadcrumb-container">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/">Trang chủ</a></li>
+            <li><a href="/Cart">Giỏ hàng</a></li>
+            <li>Thanh toán</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container margin-bottom-50">
+    <h1 class="page-title"><i class="fas fa-credit-card"></i> Thông tin thanh toán</h1>
+
+    <div class="checkout-layout">
+        <!-- Left: Customer Form -->
+        <div class="checkout-form-container">
+            <h3 class="checkout-section-title">Thông tin giao hàng</h3>
+            
+            <form action="/Orders/Checkout" method="post" class="checkout-form">
+                @Html.AntiForgeryToken()
+                
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                    </div>
+                }
+
+                <div class="form-group">
+                    <label for="FullName">Họ và tên người nhận <span class="text-red">*</span></label>
+                    <input type="text" id="FullName" name="FullName" value="@Model.FullName" placeholder="Nhập đầy đủ họ và tên" required />
+                    <span asp-validation-for="FullName" class="text-red"></span>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="PhoneNumber">Số điện thoại <span class="text-red">*</span></label>
+                        <input type="tel" id="PhoneNumber" name="PhoneNumber" value="@Model.PhoneNumber" placeholder="Số điện thoại nhận hàng" required />
+                        <span asp-validation-for="PhoneNumber" class="text-red"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Email">Địa chỉ Email <span class="text-red">*</span></label>
+                        <input type="email" id="Email" name="Email" value="@Model.Email" placeholder="Địa chỉ email để nhận hóa đơn" required />
+                        <span asp-validation-for="Email" class="text-red"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="ShippingAddress">Địa chỉ nhận hàng <span class="text-red">*</span></label>
+                    <input type="text" id="ShippingAddress" name="ShippingAddress" value="@Model.ShippingAddress" placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố" required />
+                    <span asp-validation-for="ShippingAddress" class="text-red"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="OrderNotes">Ghi chú đơn hàng (Không bắt buộc)</label>
+                    <textarea id="OrderNotes" name="OrderNotes" rows="4" placeholder="Ghi chú về thời gian giao hàng, chỉ dẫn địa chỉ chi tiết..."></textarea>
+                    <span asp-validation-for="OrderNotes" class="text-red"></span>
+                </div>
+
+                <div class="checkout-payment-methods">
+                    <h4 class="payment-title">Phương thức thanh toán</h4>
+                    <div class="payment-option active">
+                        <input type="radio" id="cod" name="payment" checked />
+                        <label for="cod">
+                            <strong class="text-dark">Thanh toán khi nhận hàng (COD)</strong>
+                            <p class="payment-desc">Bạn sẽ thanh toán bằng tiền mặt cho nhân viên giao hàng khi nhận được sản phẩm.</p>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-red btn-large btn-block margin-top-30">
+                    <i class="fas fa-shopping-bag"></i> Đặt hàng ngay
+                </button>
+            </form>
+        </div>
+
+        <!-- Right: Order Summary Preview -->
+        <div class="checkout-summary-card">
+            <h3 class="summary-title">Đơn hàng của bạn</h3>
+            
+            <div class="checkout-items-list">
+                @foreach (var item in cart)
+                {
+                    <div class="checkout-item">
+                        <div class="item-img-title">
+                            <img src="@item.ImageUrl" alt="@item.Name" />
+                            <div>
+                                <h4 class="item-name">@item.Name</h4>
+                                <span class="item-qty">Số lượng: @item.Quantity</span>
+                            </div>
+                        </div>
+                        <span class="item-price">@((item.Price * item.Quantity).ToString("N0"))&nbsp;đ</span>
+                    </div>
+                }
+            </div>
+
+            <hr class="summary-divider" />
+            
+            <div class="summary-row">
+                <span>Tạm tính:</span>
+                <strong>@totalAmount.ToString("N0")&nbsp;đ</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Phí vận chuyển:</span>
+                <span class="text-green font-weight-bold">Miễn phí</span>
+            </div>
+
+            <hr class="summary-divider" />
+
+            <div class="summary-row total-row">
+                <span>Tổng cộng:</span>
+                <strong class="text-red">@totalAmount.ToString("N0")&nbsp;đ</strong>
+            </div>
+            
+            <div class="safety-promise">
+                <i class="fas fa-user-shield"></i>
+                <span>Thông tin cá nhân của bạn được bảo mật tuyệt đối.</span>
+            </div>
+        </div>
+    </div>
+</div>

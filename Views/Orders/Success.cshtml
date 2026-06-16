@@ -1,0 +1,73 @@
+@model DATN.Models.Order
+
+@{
+    ViewData["Title"] = "Đặt hàng thành công";
+}
+
+<div class="container margin-top-50 margin-bottom-50">
+    <div class="success-card text-center">
+        <div class="success-icon-wrapper">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h1 class="success-title">Đặt hàng thành công!</h1>
+        <p class="success-subtitle">Cảm ơn bạn đã mua sắm tại Protech Systems. Mã đơn hàng của bạn là: <strong>#ORD-@Model.Id</strong></p>
+        <p class="success-info">Chúng tôi đã gửi email xác nhận kèm thông tin chi tiết đơn hàng đến địa chỉ <strong>@Model.Email</strong>.</p>
+        
+        <div class="success-details-box text-left">
+            <h3>Thông tin nhận hàng</h3>
+            <div class="details-grid-2">
+                <div>
+                    <span>Họ tên người nhận:</span>
+                    <strong>@Model.FullName</strong>
+                </div>
+                <div>
+                    <span>Số điện thoại:</span>
+                    <strong>@Model.PhoneNumber</strong>
+                </div>
+                <div class="span-2">
+                    <span>Địa chỉ giao hàng:</span>
+                    <strong>@Model.ShippingAddress</strong>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.OrderNotes))
+                {
+                    <div class="span-2">
+                        <span>Ghi chú đơn hàng:</span>
+                        <em>@Model.OrderNotes</em>
+                    </div>
+                }
+                <div>
+                    <span>Thời gian đặt hàng:</span>
+                    <strong>@Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</strong>
+                </div>
+                <div>
+                    <span>Hình thức thanh toán:</span>
+                    <strong>Thanh toán khi nhận hàng (COD)</strong>
+                </div>
+            </div>
+            
+            <h3 class="margin-top-30">Chi tiết sản phẩm</h3>
+            <div class="order-success-items">
+                @foreach (var item in Model.OrderDetails)
+                {
+                    <div class="success-item-row">
+                        <div class="success-item-name-qty">
+                            <span class="product-name-txt">@item.Product?.Name</span>
+                            <span class="product-qty-txt">x @item.Quantity</span>
+                        </div>
+                        <span class="product-total-txt">@((item.UnitPrice * item.Quantity).ToString("N0")) đ</span>
+                    </div>
+                }
+                <hr />
+                <div class="success-total-row">
+                    <span>Tổng tiền thanh toán:</span>
+                    <strong class="text-red">@Model.TotalAmount.ToString("N0")&nbsp;đ</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="success-actions margin-top-30">
+            <a href="/" class="btn btn-red btn-large"><i class="fas fa-home"></i> Quay lại trang chủ</a>
+            <a href="/Products" class="btn btn-gray btn-large"><i class="fas fa-shopping-bag"></i> Tiếp tục mua sắm</a>
+        </div>
+    </div>
+</div>

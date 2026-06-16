@@ -1,0 +1,76 @@
+@model DATN.Models.JobApplication
+
+@{
+    var job = ViewBag.Job as DATN.Models.RecruitmentPost;
+    ViewData["Title"] = $"Ứng tuyển - {job?.Title}";
+}
+
+<div class="breadcrumb-container">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/">Trang chủ</a></li>
+            <li><a href="/Recruitment">Tuyển dụng</a></li>
+            <li><a href="/Recruitment/Details/@job?.Id">Chi tiết công việc</a></li>
+            <li>Nộp hồ sơ ứng tuyển</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container margin-bottom-50">
+    <div class="form-narrow-container">
+        <h1 class="page-title text-center">Nộp hồ sơ ứng tuyển</h1>
+        <p class="text-center text-muted">Vị trí: <strong class="text-red">@job?.Title</strong> (@job?.Department)</p>
+
+        <div class="form-card margin-top-30">
+            <form action="/Recruitment/Apply" method="post" class="apply-job-form">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="RecruitmentPostId" value="@Model.RecruitmentPostId" />
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                    </div>
+                }
+
+                <div class="form-group">
+                    <label for="FullName">Họ và tên của bạn <span class="text-red">*</span></label>
+                    <input type="text" id="FullName" name="FullName" value="@Model.FullName" placeholder="Nhập đầy đủ họ và tên" required />
+                    <span asp-validation-for="FullName" class="text-red"></span>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="Email">Địa chỉ Email <span class="text-red">*</span></label>
+                        <input type="email" id="Email" name="Email" value="@Model.Email" placeholder="ví dụ: email@gmail.com" required />
+                        <span asp-validation-for="Email" class="text-red"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PhoneNumber">Số điện thoại liên hệ <span class="text-red">*</span></label>
+                        <input type="tel" id="PhoneNumber" name="PhoneNumber" value="@Model.PhoneNumber" placeholder="Số điện thoại cá nhân" required />
+                        <span asp-validation-for="PhoneNumber" class="text-red"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="CVUrlOrText">Đường link CV của bạn (Google Drive, Dropbox, TopCV...) <span class="text-red">*</span></label>
+                    <input type="text" id="CVUrlOrText" name="CVUrlOrText" value="@Model.CVUrlOrText" placeholder="Dán link CV công khai hoặc nhập tóm tắt thông tin kinh nghiệm" required />
+                    <span asp-validation-for="CVUrlOrText" class="text-red"></span>
+                    <small class="form-text text-muted">Vui lòng đảm bảo link CV ở chế độ chia sẻ công khai để Bộ phận Tuyển dụng có thể xem hồ sơ.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="CoverLetter">Thư giới thiệu bản thân (Không bắt buộc)</label>
+                    <textarea id="CoverLetter" name="CoverLetter" rows="5" placeholder="Chia sẻ thêm lý do bạn muốn ứng tuyển hoặc giới thiệu ngắn về kỹ năng nổi bật của bản thân...">@Model.CoverLetter</textarea>
+                    <span asp-validation-for="CoverLetter" class="text-red"></span>
+                </div>
+
+                <div class="form-actions-row margin-top-30">
+                    <a href="/Recruitment/Details/@job?.Id" class="btn btn-gray">Hủy bỏ</a>
+                    <button type="submit" class="btn btn-red">Nộp đơn ứng tuyển <i class="fas fa-paper-plane"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

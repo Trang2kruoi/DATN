@@ -1,0 +1,148 @@
+@model IEnumerable<DATN.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+}
+
+<div class="breadcrumb-container">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/">Trang chủ</a></li>
+            <li>Giỏ hàng</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container margin-bottom-50">
+    <h1 class="page-title"><i class="fas fa-shopping-cart"></i> Giỏ hàng của bạn</h1>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="cart-layout">
+            <!-- Left: Table of Cart Items -->
+            <div class="cart-table-container">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Sản phẩm</th>
+                            <th>Giá tiền</th>
+                            <th>Số lượng</th>
+                            <th>Tổng tiền</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr id="cart-row-@item.ProductId">
+                                <td class="td-img">
+                                    <a href="/Products/Details/@item.ProductId">
+                                        <img src="@item.ImageUrl" alt="@item.Name" class="cart-item-img" />
+                                    </a>
+                                </td>
+                                <td class="td-name">
+                                    <a href="/Products/Details/@item.ProductId" class="cart-item-name">@item.Name</a>
+                                    <span class="cart-item-sku">SKU: @item.ProductId</span>
+                                </td>
+                                <td class="td-price">
+                                    <span class="price-val">@item.Price.ToString("N0")&nbsp;đ</span>
+                                </td>
+                                <td class="td-qty">
+                                    <div class="cart-qty-control">
+                                        <button type="button" class="btn-cart-qty" onclick="changeCartQty(@item.ProductId, -1)">-</button>
+                                        <input type="number" id="cart-qty-@item.ProductId" value="@item.Quantity" min="1" readonly class="cart-qty-input" />
+                                        <button type="button" class="btn-cart-qty" onclick="changeCartQty(@item.ProductId, 1)">+</button>
+                                    </div>
+                                </td>
+                                <td class="td-total">
+                                    <span id="item-total-@item.ProductId" class="price-val text-red">@item.TotalPrice.ToString("N0")&nbsp;đ</span>
+                                </td>
+                                <td class="td-action">
+                                    <form action="/Cart/RemoveFromCart" method="post">
+                                        <input type="hidden" name="productId" value="@item.ProductId" />
+                                        <button type="submit" class="btn-remove-item" title="Xóa khỏi giỏ hàng">
+                                            <i class="far fa-trash-alt"></i> Xóa
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="cart-actions-row">
+                    <a href="/Products" class="btn btn-gray"><i class="fas fa-arrow-left"></i> Tiếp tục mua sắm</a>
+                </div>
+            </div>
+
+            <!-- Right: Order Summary -->
+            <div class="cart-summary-card">
+                <h3 class="summary-title">Tóm tắt đơn hàng</h3>
+                
+                <div class="summary-row">
+                    <span>Số lượng sản phẩm:</span>
+                    <strong id="summary-count">@Model.Sum(i => i.Quantity)</strong>
+                </div>
+                
+                <div class="summary-row">
+                    <span>Phí vận chuyển:</span>
+                    <span class="text-green font-weight-bold">Miễn phí</span>
+                </div>
+                
+                <hr class="summary-divider" />
+                
+                <div class="summary-row total-row">
+                    <span>Tổng tiền thanh toán:</span>
+                    <strong id="summary-total" class="text-red">@Model.Sum(i => i.TotalPrice).ToString("N0")&nbsp;đ</strong>
+                </div>
+
+                <p class="vat-note">(Giá đã bao gồm thuế VAT và phí dịch vụ)</p>
+
+                <a href="/Orders/Checkout" class="btn btn-red btn-block btn-large text-center margin-top-20">
+                    <i class="fas fa-credit-card"></i> Tiến hành thanh toán
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="empty-cart-box text-center">
+            <div class="empty-icon"><i class="fas fa-shopping-basket"></i></div>
+            <h2>Giỏ hàng của bạn đang trống!</h2>
+            <p>Vui lòng lựa chọn các sản phẩm chất lượng chính hãng từ cửa hàng của chúng tôi.</p>
+            <a href="/Products" class="btn btn-red btn-large">Mua sắm ngay</a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function changeCartQty(productId, amount) {
+            var qtyInput = document.getElementById('cart-qty-' + productId);
+            var currentVal = parseInt(qtyInput.value);
+            var newVal = currentVal + amount;
+            if (newVal < 1) {
+                return;
+            }
+            
+            // AJAX to update cart
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/Cart/UpdateQuantity', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        qtyInput.value = newVal;
+                        document.getElementById('item-total-' + productId).innerText = response.itemTotal;
+                        document.getElementById('summary-total').innerText = response.totalAmount;
+                        document.getElementById('summary-count').innerText = response.cartCount;
+                        document.getElementById('cart-badge').innerText = response.cartCount;
+                        showToast('Cập nhật số lượng thành công!');
+                    }
+                }
+            };
+            xhr.send('productId=' + productId + '&quantity=' + newVal);
+        }
+    </script>
+}
